@@ -1,0 +1,28 @@
+# Decap CMS settings for the Certpedia blog.
+backend:
+  name: github
+  repo: YOUR-GITHUB-USERNAME/YOUR-REPO-NAME   # <-- change this
+  branch: main                                # <-- change if your branch is "master"
+
+# "Publish" goes live directly (no review step).
+media_folder: "images/blog"
+public_folder: "/images/blog"
+
+collections:
+  - name: blog
+    label: "Blog posts"
+    label_singular: "Blog post"
+    folder: "content/blog"
+    create: true
+    extension: "md"
+    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
+    summary: "{{title}} ({{cat}})"
+    fields:
+      - { label: "Title", name: "title", widget: "string" }
+      - { label: "Publish date", name: "date", widget: "datetime", date_format: "YYYY-MM-DD", time_format: false, format: "YYYY-MM-DD" }
+      - label: "Category"
+        name: "cat"
+        widget: "select"
+        options: ["DGFT", "BIS", "WPC", "ISO", "EPR", "GST", "Company Registration", "General"]
+      - { label: "Summary", name: "summary", widget: "text", hint: "1-2 lines shown on the blog card and in Google results." }
+      - { label: "Full article", name: "body", widget: "markdown" }
