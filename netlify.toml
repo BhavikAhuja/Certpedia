@@ -1,0 +1,6 @@
+[build]
+  command = "npm install && node scripts/build-blog.js"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "18"

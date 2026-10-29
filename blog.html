@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="en-IN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Certpedia Blog | BIS, WPC, DGFT, ISO &amp; Compliance Updates India</title>
+<meta name="description" content="News and updates on BIS, WPC, DGFT, ISO, EPR, GST and other approvals for Indian manufacturers, importers and founders. By Certpedia.">
+<link rel="canonical" href="https://www.certpedia.in/blog">
+<meta name="theme-color" content="#1A4DF0">
+<link rel="icon" href="favicon.png" type="image/png">
+<meta property="og:type" content="website"><meta property="og:site_name" content="Certpedia"><meta property="og:title" content="Certpedia Blog"><meta property="og:description" content="News and updates on BIS, WPC, DGFT, ISO, EPR and GST for Indian businesses."><meta property="og:url" content="https://www.certpedia.in/blog">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="blog.css">
+</head>
+<body>
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="index.html" aria-label="Certpedia home"><img src="logo.png" alt="Certpedia" width="58" height="64"></a>
+    <nav class="nav" aria-label="Primary">
+      <a href="index.html">Home</a>
+      <a href="view-all-services.html">Services</a>
+      <a href="blog.html" aria-current="page">Blog</a>
+      <a class="btn" href="https://www.certpedia.in/Contact-us">Free consultation</a>
+    </nav>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap">
+    <span class="eyebrow">Certpedia blog</span>
+    <h1>News &amp; updates on Indian approvals</h1>
+    <p class="lead">New rules, notifications and practical guides on BIS, WPC, DGFT, ISO, EPR and GST, in plain language.</p>
+    <div class="search" id="searchBox" role="search">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+      <input id="q" type="search" placeholder="Search blog, e.g. DGFT, BIS, import, EPR" aria-label="Search the blog" autocomplete="off">
+      <button class="clr" id="clr" type="button" aria-label="Clear search">&times;</button>
+    </div>
+    <div class="chips" id="chips" role="group" aria-label="Filter by category"></div>
+  </div>
+</section>
+
+<main>
+  <div class="wrap">
+    <div class="meta"><span id="count"></span><span>Newest first</span></div>
+    <div class="grid" id="grid" aria-live="polite"></div>
+    <div class="empty" id="empty"><b>No posts found</b>Try another word, or clear the search and category.</div>
+  </div>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>&copy; 2026 Technocrats Network Private Limited &middot; C-127, Sector 2, Noida 201301</span>
+    <span><a href="tel:+919311324939">+91 93113 24939</a> &middot; <a href="mailto:support@certpedia.in">support@certpedia.in</a></span>
+  </div>
+</footer>
+
+<script>
+(function () {
+  var $ = function (id) { return document.getElementById(id); };
+  var grid = $("grid"), q = $("q"), chipsEl = $("chips"), box = $("searchBox");
+  var cat = "All", POSTS = [];
+
+  function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]; }); }
+  function hl(s, t) {
+    var out = esc(s); if (!t) return out;
+    var re = new RegExp("(" + t.replace(/[.*+?^${}()|[\]\\]/g, "\\$&") + ")", "ig");
+    return out.replace(re, "<mark>$1</mark>");
+  }
+  function fmt(d) {
+    var p = d.split("-"); var m = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+    return +p[2] + " " + m[+p[1] - 1] + " " + p[0];
+  }
+  function buildChips() {
+    var cats = ["All"]; POSTS.forEach(function (p) { if (cats.indexOf(p.cat) < 0) cats.push(p.cat); });
+    chipsEl.innerHTML = "";
+    cats.forEach(function (c) {
+      var b = document.createElement("button"); b.type = "button"; b.className = "chip"; b.textContent = c;
+      b.setAttribute("aria-pressed", c === cat ? "true" : "false");
+      b.addEventListener("click", function () { cat = c; buildChips(); render(); });
+      chipsEl.appendChild(b);
+    });
+  }
+  function render() {
+    var term = q.value.trim(), tl = term.toLowerCase();
+    box.classList.toggle("has", !!term);
+    var hits = POSTS.filter(function (p) {
+      if (cat !== "All" && p.cat !== cat) return false;
+      if (!tl) return true;
+      return (p.title + " " + p.cat + " " + p.summary + " " + (p.text || "")).toLowerCase().indexOf(tl) > -1;
+    });
+    grid.innerHTML = "";
+    hits.forEach(function (p) {
+      var c = document.createElement("article"); c.className = "card";
+      var title = p.url ? '<a href="' + esc(p.url) + '">' + hl(p.title, term) + '</a>' : hl(p.title, term);
+      var action = p.url ? '<a class="more" href="' + esc(p.url) + '">Read article &rarr;</a>'
+                 : (p.body ? '<button class="more" type="button" aria-expanded="false">Read more</button>' : "");
+      c.innerHTML = '<span class="tag">' + esc(p.cat) + '</span><h2>' + title + '</h2><p>' + hl(p.summary, term) + '</p>' +
+        (p.body && !p.url ? '<div class="body">' + p.body + '</div>' : '') +
+        '<div class="foot"><time datetime="' + esc(p.date) + '">' + fmt(p.date) + '</time>' + action + '</div>';
+      var btn = c.querySelector("button.more");
+      if (btn) btn.addEventListener("click", function () {
+        var o = c.classList.toggle("open"); btn.textContent = o ? "Show less" : "Read more"; btn.setAttribute("aria-expanded", o);
+      });
+      grid.appendChild(c);
+    });
+    $("count").textContent = hits.length + (hits.length === 1 ? " post" : " posts");
+    $("empty").style.display = hits.length ? "none" : "block";
+  }
+  q.addEventListener("input", render);
+  $("clr").addEventListener("click", function () { q.value = ""; render(); q.focus(); });
+  var m = /[?&]q=([^&]*)/.exec(location.search); if (m) q.value = decodeURIComponent(m[1].replace(/\+/g, " "));
+  fetch("posts.json", { cache: "no-cache" }).then(function (r) { return r.json(); }).then(function (d) {
+    POSTS = d.sort(function (a, b) { return a.date < b.date ? 1 : -1; });
+    buildChips(); render();
+  }).catch(function () {
+    $("empty").innerHTML = "<b>Blog could not load</b>Please try again in a moment.";
+    $("empty").style.display = "block"; $("count").textContent = "";
+  });
+})();
+</script>
+</body>
+</html>
